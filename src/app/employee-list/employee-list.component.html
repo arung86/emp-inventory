@@ -1,144 +1,62 @@
-<button (click)="openModalCentered(content)">Modal</button>
-<h2>Employee Table</h2>
-<div class="table-responsive">
-    <table class="table table-striped table-sm">
+<form>
+    <div class="form-group form-inline">
+        Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="service.searchTerm" />
+        <span class="ml-3" *ngIf="service.loading$ | async">Loading...</span>
+    </div>
+    <div>
+        <button (click)="addUser(emp)"> Add User</button>
+    </div>
+    <table class="table table-striped">
         <thead>
             <tr>
-                <th>#</th>
-                <th>Header</th>
-                <th>Header</th>
-                <th>Header</th>
-                <th>Header</th>
+                <th scope="col">#</th>
+                <th scope="col" sortable="first_name" (sort)="onSort($event)">FirstName
+                    <!--- <span class="glyphicon sort-icon" *ngIf="key =='FirstName'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>   -->
+                </th>
+                <th (click)="sort('LastName')">LastName</th>
+                <th (click)="sort('Email')">Email</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1,001</td>
-                <td>Lorem</td>
-                <td>ipsum</td>
-                <td>dolor</td>
-                <td>sit</td>
-            </tr>
-            <tr>
-                <td>1,002</td>
-                <td>amet</td>
-                <td>consectetur</td>
-                <td>adipiscing</td>
-                <td>elit</td>
-            </tr>
-            <tr>
-                <td>1,003</td>
-                <td>Integer</td>
-                <td>nec</td>
-                <td>odio</td>
-                <td>Praesent</td>
-            </tr>
-            <tr>
-                <td>1,003</td>
-                <td>libero</td>
-                <td>Sed</td>
-                <td>cursus</td>
-                <td>ante</td>
-            </tr>
-            <tr>
-                <td>1,004</td>
-                <td>dapibus</td>
-                <td>diam</td>
-                <td>Sed</td>
-                <td>nisi</td>
-            </tr>
-            <tr>
-                <td>1,005</td>
-                <td>Nulla</td>
-                <td>quis</td>
-                <td>sem</td>
-                <td>at</td>
-            </tr>
-            <tr>
-                <td>1,006</td>
-                <td>nibh</td>
-                <td>elementum</td>
-                <td>imperdiet</td>
-                <td>Duis</td>
-            </tr>
-            <tr>
-                <td>1,007</td>
-                <td>sagittis</td>
-                <td>ipsum</td>
-                <td>Praesent</td>
-                <td>mauris</td>
-            </tr>
-            <tr>
-                <td>1,008</td>
-                <td>Fusce</td>
-                <td>nec</td>
-                <td>tellus</td>
-                <td>sed</td>
-            </tr>
-            <tr>
-                <td>1,009</td>
-                <td>augue</td>
-                <td>semper</td>
-                <td>porta</td>
-                <td>Mauris</td>
-            </tr>
-            <tr>
-                <td>1,010</td>
-                <td>massa</td>
-                <td>Vestibulum</td>
-                <td>lacinia</td>
-                <td>arcu</td>
-            </tr>
-            <tr>
-                <td>1,011</td>
-                <td>eget</td>
-                <td>nulla</td>
-                <td>Class</td>
-                <td>aptent</td>
-            </tr>
-            <tr>
-                <td>1,012</td>
-                <td>taciti</td>
-                <td>sociosqu</td>
-                <td>ad</td>
-                <td>litora</td>
-            </tr>
-            <tr>
-                <td>1,013</td>
-                <td>torquent</td>
-                <td>per</td>
-                <td>conubia</td>
-                <td>nostra</td>
-            </tr>
-            <tr>
-                <td>1,014</td>
-                <td>per</td>
-                <td>inceptos</td>
-                <td>himenaeos</td>
-                <td>Curabitur</td>
-            </tr>
-            <tr>
-                <td>1,015</td>
-                <td>sodales</td>
-                <td>ligula</td>
-                <td>in</td>
-                <td>libero</td>
+            <tr *ngFor="let emp of employees$ | orderBy: key : reverse |async">
+                <th scope="row">{{ emp.id }}</th>
+                <td>
+                    <!-- <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag" class="mr-2" style="width: 20px"> -->
+                    <!-- <ngb-highlight [result]="emp.name" [term]="service.searchTerm"></ngb-highlight> -->
+                    {{ emp.first_name }}
+                </td>
+                <td>
+                    <!--td2-->
+                    <!-- <ngb-highlight [result]="emp.area | number" [term]="service.searchTerm"></ngb-highlight> -->
+                    {{ emp.last_name }}
+                </td>
+                <td>
+                    <!--td3-->
+                    <!--<ngb-highlight [result]="emp.population | number" [term]="service.searchTerm"></ngb-highlight> -->
+                    {{ emp.email }}
+                </td>
+                <td>
+                    <div>
+                        <button (click)="editEmployee(emp)">Edit</button>
+                        <button (click)="deleteEmployee(emp)">Delete</button>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
-</div>
+    <!-- <tr *ngFor="let employee of employees$ | async">
+     <td>{{ employee.id}}</td>
+     </tr> -->
+    <div class="d-flex justify-content-between p-2">
+        <!--<ngb-pagination [collectionSize]="total$ | async" [(page)]="service.page" [pageSize]="service.pageSize">
+        </ngb-pagination>-->
 
-<ng-template #content let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title">Modal title</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+        <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
+      <option [ngValue]="2">2 items per page</option>
+      <option [ngValue]="4">4 items per page</option>
+      <option [ngValue]="6">6 items per page</option>
+    </select>
     </div>
-    <div class="modal-body">
-        <p>One fine body&hellip;</p>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
-    </div>
-</ng-template>
+
+</form>

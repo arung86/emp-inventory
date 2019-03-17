@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from '@angular/core';
+import { Component, QueryList, Directive, EventEmitter, Input, Output, ViewChildren } from '@angular/core';
 
 import { DecimalPipe } from '@angular/common';
 
@@ -7,12 +7,11 @@ import { CountryService } from '../service/data.service';
 import { Country } from '../service/country';
 import { NgbdSortableHeader, SortEvent } from '../service/sortable.directive';
 
-
 @Component({
   selector: 'app-manager-list',
   templateUrl: './manager-list.component.html',
   styleUrls: ['./manager-list.component.css'],
-  providers:[CountryService, DecimalPipe]
+  providers: [CountryService, DecimalPipe]
 })
 export class ManagerListComponent {
 

@@ -1,0 +1,34 @@
+{
+  "employees": [
+    {
+      "id": 1,
+      "first_name": "Manishw",
+      "last_name": "Kumar1",
+      "email": "ismanishkumar@gmail.com"
+    },
+    {
+      "id": 2,
+      "email": "maniskuj@in.ibm.com",
+      "first_name": "Manish",
+      "last_name": "Bower"
+    },
+    {
+      "id": 3,
+      "email": "annsmith@in.ibm.com",
+      "first_name": "Sebastian",
+      "last_name": "Smith"
+    },
+    {
+      "id": 4,
+      "email": "maniskuj@in.ibm.com",
+      "first_name": "Sebastian",
+      "last_name": "Bower"
+    },
+    {
+      "id": 5,
+      "email": "Sample2@in.ibm.com",
+      "first_name": "Manish",
+      "last_name": "Smith"
+    }
+  ]
+}

@@ -1,7 +1,6 @@
-export interface Country {
+export interface employees {
   id: number;
-  name: string;
-  flag: string;
-  area: number;
-  population: number;
-}
+  email: string;
+  first_name: string;
+  last_name: string;
+ }

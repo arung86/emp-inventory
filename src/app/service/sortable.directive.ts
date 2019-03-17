@@ -9,13 +9,16 @@ export interface SortEvent {
 }
 
 @Directive({
-  selector: 'th[sortable]',
+  // tslint:disable-next-line:directive-selector
+  selector: 'app-th[sortable]',
+  // tslint:disable-next-line:use-host-property-decorator
   host: {
     '[class.asc]': 'direction === "asc"',
     '[class.desc]': 'direction === "desc"',
     '(click)': 'rotate()'
   }
 })
+// tslint:disable-next-line:directive-class-suffix
 export class NgbdSortableHeader {
 
   @Input() sortable: string;

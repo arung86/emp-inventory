@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { ManagerListComponent } from './manager-list/manager-list.component';
+import {EditUserComponent} from './edit-user/edit-user.component';
+import {AddUserComponent} from './add-user/add-user.component'
 
 const routes: Routes = [
   {
@@ -20,6 +22,8 @@ const routes: Routes = [
     redirectTo: '/employee',
     pathMatch: 'full'
   },
+  { path: 'edit-user', component: EditUserComponent },
+  { path: 'add-user', component: AddUserComponent },
   { path: '**', component: EmployeeListComponent }
 ];
 

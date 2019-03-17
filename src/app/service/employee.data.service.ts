@@ -2,14 +2,16 @@ import { Injectable, PipeTransform } from '@angular/core';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 
-import { Country } from './country';
-import { COUNTRIES } from './countries';
+import { employees } from './employee';
+//import { COUNTRIES } from './countries';
 import { DecimalPipe } from '@angular/common';
 import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { SortDirection } from './sortable.directive';
+import { ApiService } from '../service/api.service';
+
 
 interface SearchResult {
-    countries: Country[];
+    empl: employees[];
     total: number;
 }
 
@@ -25,11 +27,11 @@ function compare(v1, v2) {
     return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 }
 
-function sort(countries: Country[], column: string, direction: string): Country[] {
+function sort(empl: employees[], column: string, direction: string): employees[] {
     if (direction === '') {
-        return countries;
+        return empl;
     } else {
-        return [...countries].sort((a, b) => {
+        return [...empl].sort((a, b) => {
             const res = compare(a[column], b[column]);
             return direction === 'asc' ? res : -res;
         });
@@ -42,17 +44,17 @@ function sort(countries: Country[], column: string, direction: string): Country[
 }; */
 
 
-function matches(country: Country, term: string, pipe: PipeTransform) {
-    return country.name.toLowerCase().includes(term)
-        || pipe.transform(country.area).includes(term)
-        || pipe.transform(country.population).includes(term);
+function matches(empl: employees, term: string, pipe: PipeTransform) {
+    return empl.email.toLowerCase().includes(term)
+        || pipe.transform(empl.first_name).includes(term)
+        || pipe.transform(empl.last_name).includes(term);
 }
 
 @Injectable({ providedIn: 'root' })
-export class CountryService {
+export class EmployeeService {
     private _loading$ = new BehaviorSubject<boolean>(true);
     private _search$ = new Subject<any>();
-    private _countries$ = new BehaviorSubject<Country[]>([]);
+    private _employee$ = new BehaviorSubject<employees[]>([]);
     private _total$ = new BehaviorSubject<number>(0);
 
     private _state: State = {
@@ -63,7 +65,7 @@ export class CountryService {
         sortDirection: ''
     };
 
-    constructor(private pipe: DecimalPipe) {
+    constructor(private pipe: DecimalPipe, private apiservice:ApiService) {
         this._search$.pipe(
             tap(() => this._loading$.next(true)),
             debounceTime(200),
@@ -71,14 +73,14 @@ export class CountryService {
             delay(200),
             tap(() => this._loading$.next(false))
         ).subscribe(result => {
-            this._countries$.next(result['countries']);
+            this._employee$.next(result['empl']);
             this._total$.next(result['total']);
         });
 
         this._search$.next();
     }
 
-    get countries$() { return this._countries$.asObservable(); }
+    get employee$() { return this._employee$.asObservable(); }
     get total$() { return this._total$.asObservable(); }
     get loading$() { return this._loading$.asObservable(); }
     get page() { return this._state.page; }
@@ -98,16 +100,21 @@ export class CountryService {
 
     private _search(): Observable<SearchResult> {
         const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
-
+        //private apiservice = newApiService();
+        let empl = [];
+       
+         this.apiservice.getEmployeeArray().subscribe(empl => {
+            empl = empl as employees[]
+        });
         // 1. sort
-        let countries = sort(COUNTRIES, sortColumn, sortDirection);
+        empl = sort(empl, sortColumn, sortDirection);
 
         // 2. filter
-        countries = countries.filter(country => matches(country, searchTerm, this.pipe));
-        const total = countries.length;
+        empl = empl.filter(country => matches(country, searchTerm, this.pipe));
+        const total = empl.length;
 
         // 3. paginate
-        countries = countries.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
-        return of({ countries, total });
+        empl = empl.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+        return of({ empl, total });
     }
 }
