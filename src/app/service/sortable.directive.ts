@@ -10,7 +10,7 @@ export interface SortEvent {
 
 @Directive({
   // tslint:disable-next-line:directive-selector
-  selector: 'app-th[sortable]',
+  selector: 'th[sortable]',
   // tslint:disable-next-line:use-host-property-decorator
   host: {
     '[class.asc]': 'direction === "asc"',

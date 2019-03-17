@@ -3,7 +3,6 @@ import { Injectable, PipeTransform } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 
 import { employees } from './employee';
-//import { COUNTRIES } from './countries';
 import { DecimalPipe } from '@angular/common';
 import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { SortDirection } from './sortable.directive';
@@ -38,10 +37,6 @@ function sort(empl: employees[], column: string, direction: string): employees[]
     }
 }
 
-/* function export() {
-    // tslint:disable-next-line:no-unused-expression
-    new Angular5Csv(COUNTRIES, 'My Report');
-}; */
 
 
 function matches(empl: employees, term: string, pipe: PipeTransform) {
@@ -65,7 +60,7 @@ export class EmployeeService {
         sortDirection: ''
     };
 
-    constructor(private pipe: DecimalPipe, private apiservice:ApiService) {
+    constructor(private pipe: DecimalPipe, private apiservice: ApiService) {
         this._search$.pipe(
             tap(() => this._loading$.next(true)),
             debounceTime(200),
@@ -99,22 +94,28 @@ export class EmployeeService {
     }
 
     private _search(): Observable<SearchResult> {
-        const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
-        //private apiservice = newApiService();
-        let empl = [];
-       
-         this.apiservice.getEmployeeArray().subscribe(empl => {
-            empl = empl as employees[]
+        return new Observable(observer => {
+            const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
+            let empl = [];
+            let total;
+
+            this.apiservice.getEmployeeArray().subscribe((result) => {
+                empl = result;
+                // 1. sort
+                empl = sort(empl, sortColumn, sortDirection);
+
+                // 2. filter
+                empl = empl.filter(emp => {
+                    matches(emp, searchTerm, this.pipe);
+                }
+                );
+
+                total = empl.length;
+
+                // 3. paginate
+                empl = empl.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+                observer.next({ empl, total });
+            });
         });
-        // 1. sort
-        empl = sort(empl, sortColumn, sortDirection);
-
-        // 2. filter
-        empl = empl.filter(country => matches(country, searchTerm, this.pipe));
-        const total = empl.length;
-
-        // 3. paginate
-        empl = empl.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
-        return of({ empl, total });
     }
 }

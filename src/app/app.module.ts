@@ -21,7 +21,9 @@ import { Ng2OrderModule } from 'ng2-order-pipe';
 
 @NgModule({
   declarations: [
-    AppComponent, EmployeeListComponent, ManagerListComponent, NgbHighlight, NgbdSortableHeader, EditUserComponent, AddUserComponent, DeleteUserComponent
+    AppComponent, EmployeeListComponent,
+    ManagerListComponent, NgbHighlight, NgbdSortableHeader,
+    EditUserComponent, AddUserComponent, DeleteUserComponent
   ],
   imports: [
     BrowserModule,

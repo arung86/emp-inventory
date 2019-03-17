@@ -3,38 +3,32 @@
         Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="service.searchTerm" />
         <span class="ml-3" *ngIf="service.loading$ | async">Loading...</span>
     </div>
+
     <div>
-        <button (click)="addUser(emp)"> Add User</button>
+        <button (click)="addUser(emp)">Add User</button>
     </div>
+
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col" sortable="first_name" (sort)="onSort($event)">FirstName
-                    <!--- <span class="glyphicon sort-icon" *ngIf="key =='FirstName'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>   -->
-                </th>
-                <th (click)="sort('LastName')">LastName</th>
-                <th (click)="sort('Email')">Email</th>
+                <th scope="col" sortable="first_name" (sort)="onSort($event)">FirstName</th>
+                <th scope="col" sortable="last_name" (sort)="onSort($event)">LastName</th>
+                <th scope="col" sortable="email" (sort)="onSort($event)">Email</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let emp of employees$ | orderBy: key : reverse |async">
+            <tr *ngFor="let emp of employees$ | async">
                 <th scope="row">{{ emp.id }}</th>
                 <td>
-                    <!-- <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag" class="mr-2" style="width: 20px"> -->
-                    <!-- <ngb-highlight [result]="emp.name" [term]="service.searchTerm"></ngb-highlight> -->
-                    {{ emp.first_name }}
+                    <ngb-highlight [result]="emp.first_name" [term]="service.searchTerm"></ngb-highlight>
                 </td>
                 <td>
-                    <!--td2-->
-                    <!-- <ngb-highlight [result]="emp.area | number" [term]="service.searchTerm"></ngb-highlight> -->
-                    {{ emp.last_name }}
+                    <ngb-highlight [result]="emp.last_name" [term]="service.searchTerm"></ngb-highlight>
                 </td>
                 <td>
-                    <!--td3-->
-                    <!--<ngb-highlight [result]="emp.population | number" [term]="service.searchTerm"></ngb-highlight> -->
-                    {{ emp.email }}
+                    <ngb-highlight [result]="emp.email" [term]="service.searchTerm"></ngb-highlight>
                 </td>
                 <td>
                     <div>
