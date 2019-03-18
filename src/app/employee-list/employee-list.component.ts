@@ -26,7 +26,8 @@ export class EmployeeListComponent implements OnInit {
   constructor(public service: EmployeeService, private apiService: ApiService, private router: Router) {
     // this.countries$ = service.countries$;
     this.total$ = service.total$;
-    this.employees$ = apiService.getEmployee();
+    this.employees$ = service.employee$;
+    //this.employees$ = apiService.getEmployee();
     // this.apiService$ = apiService;
 
   }

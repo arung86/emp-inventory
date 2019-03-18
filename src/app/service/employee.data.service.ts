@@ -40,9 +40,11 @@ function sort(empl: employees[], column: string, direction: string): employees[]
 
 
 function matches(empl: employees, term: string, pipe: PipeTransform) {
-    return empl.email.toLowerCase().includes(term)
-        || pipe.transform(empl.first_name).includes(term)
-        || pipe.transform(empl.last_name).includes(term);
+    return empl.first_name.includes(term) 
+         || empl.email.toLowerCase().includes(term)
+        || empl.last_name.includes(term);
+    // || pipe.transform(empl.first_name).includes(term)
+    // || pipe.transform(empl.last_name).includes(term);
 }
 
 @Injectable({ providedIn: 'root' })
@@ -105,9 +107,8 @@ export class EmployeeService {
                 empl = sort(empl, sortColumn, sortDirection);
 
                 // 2. filter
-                empl = empl.filter(emp => {
-                    matches(emp, searchTerm, this.pipe);
-                }
+                empl = empl.filter(emp => 
+                    matches(emp, searchTerm, this.pipe)
                 );
 
                 total = empl.length;
